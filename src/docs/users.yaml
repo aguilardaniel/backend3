@@ -1,0 +1,257 @@
+paths:
+  /api/users/:
+    get:
+      summary: Obtiene todos los usuarios
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Usuarios de la base de datos otenidos correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#components/schemas/User'
+        "500":
+          description: Error interno del servidor
+
+  /api/users/{uid}:
+    get:
+      summary: Obtiene un usuario de la base de datos
+      tags:
+        - Users
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: id del usuario que se está solicitando
+        schema:
+          type: string
+      # - name: Authorization
+      #   in: header
+      #   required: true
+      #   description: Token de autenticación
+      #   schema:
+      #     type: string            
+      responses:
+        "200":
+          description: Recupera un usuario de la DB, según el uid que enviamos en la ruta como parámetro
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  payload:
+                    $ref: '#components/schemas/User'
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  error:
+                    type: string
+                    example: "User not found"
+                example:
+                  status: "error"
+                  error: "User not found"
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Eliminar un usuario de la base de datos
+      tags:
+        - Users
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: id del usuario a Eliminar
+        schema:
+          type: string           
+      responses:
+        "200":
+          description: Elimina un usuario de la DB, según el uid que enviamos en la ruta como parámetro
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "User deleted"
+                required:
+                  - status
+                  - message
+              example:
+                status: "success"
+                message: "User deleted"
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Actualiza un usuario
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            type: string
+          description: Id del usuario a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateUser'
+            example:
+              first_name: "Gustavo"
+              email: "gustavo_actualizado@hotmail.com"
+      responses:
+        "200":
+          description: Usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "User updated"
+                required:
+                  - status
+                  - message
+              example:
+                status: "success"
+                message: "User updated"
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  error:
+                    type: string
+                    example: "User not found"
+                required:
+                  - status
+                  - error
+              example:
+                status: "error"
+                error: "User not found"    
+        "500":
+          description: Error interno del servidor
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de mongo
+        first_name:
+          type: string
+          description: Nombre o nombres del usuario
+        last_name:
+          type: string
+          description: Apellido o apellidos del usuario    
+        email:
+          type: string
+          description: Correo electronico del usuario
+        password: 
+          type: string
+          description: contraseña de acceso encriptada
+        role:
+          type: string
+          description: Roll del usuario en el sistema
+        pets:
+          type: array
+          description: Lista de mascotas asociadas al usuario
+          items:
+            type: object
+            properties:
+              _id:
+              type: string
+              description: Id de la mascota
+        __v:
+          type: integer
+          description: Versión del documento en Mongo
+      example:
+        _id: ObjectId("60acc54545c8e82e0475200b")
+        first_name: Diego
+        last_name: Casillas Lemus
+        email: Diego_CasillasLemus@hotmail.com
+        password: $2b$10$qM3vmzMTgmtbWeW/Rve37e0iHb4hM.lD0SpsjJeOXP257vprueba.
+        role: user
+        pets:
+          - _id: ObjectId("aa830cfb478e546801761edb")
+          - _id: ObjectId("c3a8444bb0a13b8fe2f03286")
+        __v: 0 
+
+  requestBodies:
+    updateUserUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Nombre de usuario
+        last_name:
+          type: string
+          description: Apellido
+        email:
+          type: string
+          description: Correo del usuario
+        password:
+          type: string
+          description: Contraseña del usuario
+        role:
+          type: string
+          description: Roll del usuario en el sistema
+        pets:
+          type: array
+          description: Lista de mascotas asociadas al usuario
+          items:
+            type: object
+            properties:
+              _id:
+              type: string
+              description: Id de la mascota
+        __v:
+          type: integer
+          description: Versión del documento en Mongo
+      example:
+        first_name: Diego
+        last_name: Casillas Lemus
+        email: Diego_CasillasLemus@hotmail.com
+        password: $2b$10$qM3vmzMTgmtbWeW/Rve37e0iHb4hM.lD0SpsjJeOXP257vprueba.
+        role: user
+        pets:
+          - _id: "aa830cfb478e546801761edb"
+          - _id: "c3a8444bb0a13b8fe2f03286"
+        __v: 0 
+
+             

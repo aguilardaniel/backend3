@@ -8,6 +8,7 @@ const getAllUsers = async(req,res)=>{
 const getUser = async(req,res)=> {
     const userId = req.params.uid;
     const user = await usersService.getUserById(userId);
+    console.log(user)
     if(!user) return res.status(404).send({status:"error",error:"User not found"})
     res.send({status:"success",payload:user})
 }

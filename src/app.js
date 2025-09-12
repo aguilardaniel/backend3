@@ -8,11 +8,51 @@ import adoptionsRouter from './routes/adoption.router.js';
 import sessionsRouter from './routes/sessions.router.js';
 import mocksRouter from './routes/mocks.router.js';
 
+import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
+
 const app = express();
 const PORT = process.env.PORT||8080;
 
+
+
+// Configuración de opciones para swagger-jsdoc
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API de ejemplo',
+      version: '1.0.0',
+      description: 'Documentación de la API de ejemplo',
+    },
+    // servers: [
+    //   {
+    //     url: 'http://localhost:3000',
+    //   },
+    // ],
+  },
+  apis: ['./src/docs/*.yaml'], // Rutas de tus archivos de rutas a documentar
+};
+
+// Inicializar swagger-jsdoc
+const specs = swaggerJsdoc(options);
+
+// Middleware para servir la documentación Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+
+
+
+
+
+
+
+
+
+
 const connection=async()=>{
     try {
+        mongoose.set('strictQuery', false);
         await mongoose.connect(`mongodb+srv://Daniel:coderbackend2@cluster0.dn7gxxu.mongodb.net/backend3`)
         console.log("DB conectada...!!!")
     } catch (error) {
