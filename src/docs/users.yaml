@@ -213,7 +213,7 @@ components:
         __v: 0 
 
   requestBodies:
-    updateUserUser:
+    updateUser:
       type: object
       properties:
         first_name:
