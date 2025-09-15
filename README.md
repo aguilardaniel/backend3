@@ -5,7 +5,7 @@ Incluye autenticación, autorización y documentación con Swagger/OpenAPI.
 
 ## Link a la imagen del proyecto en Dockerhub:
 
-https://hub.docker.com/repository/docker/ldaguilar/serverdaniel
+https://hub.docker.com/r/ldaguilar/serverdaniel
 
 
 
