@@ -22,16 +22,18 @@ const updateUser =async(req,res)=>{
     res.send({status:"success",message:"User updated"})
 }
 
+
 /*
-// No Funciona!!
+No Funciona realmente. El código original no elimina el usuario
+Dejo comentada abajo una potencial solución
+*/
 const deleteUser = async(req,res) =>{
     const userId = req.params.uid;
     const result = await usersService.getUserById(userId);
     res.send({status:"success",message:"User deleted"})
 }
-*/
 
-
+/*
 const deleteUser = async(req,res) =>{
     const userId = req.params.uid;
     const user = await usersService.getUserById(userId);
@@ -39,6 +41,9 @@ const deleteUser = async(req,res) =>{
     const result = await usersService.delete(userId);
     res.send({status:"success",message:"User deleted"})
 }
+
+*/
+
 
 export default {
     deleteUser,

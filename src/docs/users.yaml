@@ -21,6 +21,10 @@ paths:
                       $ref: '#components/schemas/User'
         "500":
           description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
 
   /api/users/{uid}:
     get:
@@ -71,8 +75,12 @@ paths:
                   error: "User not found"
         "500":
           description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
     delete:
-      summary: Eliminar un usuario de la base de datos
+      summary: Eliminar un usuario de la base de datos (El còdigo actual debería corregirse ya que no elimina el usuario, solo muestra un status 200 diciendo "usuario eliminado")
       tags:
         - Users
       parameters:
@@ -102,27 +110,31 @@ paths:
               example:
                 status: "success"
                 message: "User deleted"
-        "404":
-          description: Usuario no encontrado
+        #"404":
+        #  description: Usuario no encontrado
+        #  content:
+        #    application/json:
+        #      schema:
+        #        type: object
+        #        properties:
+        #          status:
+        #            type: string
+        #            example: "error"
+        #          error:
+        #            type: string
+        #            example: "User not found"
+        #        required:
+        #          - status
+        #          - error
+        #      example:
+        #        status: "error"
+        #        error: "User not found"   
+        "500":
+          description: Error interno del servidor
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: "error"
-                  error:
-                    type: string
-                    example: "User not found"
-                required:
-                  - status
-                  - error
-              example:
-                status: "error"
-                error: "User not found"   
-        "500":
-          description: Error interno del servidor
+                $ref: '#/components/schemas/Error500'
     put:
       summary: Actualiza un usuario
       tags:
@@ -136,6 +148,7 @@ paths:
           description: Id del usuario a actualizar
       requestBody:
         required: true
+        description: Enviar los datos que se quieran actualizar
         content:
           application/json:
             schema:
@@ -184,8 +197,21 @@ paths:
                 error: "User not found"    
         "500":
           description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
 components:
   schemas:
+    Error500:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "error"
+        error:
+          type: string
+          example: "Internal server error"
     User:
       type: object
       properties:
@@ -214,21 +240,21 @@ components:
             type: object
             properties:
               _id:
-              type: string
-              description: Id de la mascota
+                type: string
+                description: Id de la mascota
         __v:
           type: integer
           description: Versión del documento en Mongo
       example:
-        _id: ObjectId("60acc54545c8e82e0475200b")
+        _id: "60acc54545c8e82e0475200b"
         first_name: Diego
         last_name: Casillas Lemus
         email: Diego_CasillasLemus@hotmail.com
         password: $2b$10$qM3vmzMTgmtbWeW/Rve37e0iHb4hM.lD0SpsjJeOXP257vprueba.
         role: user
         pets:
-          - _id: ObjectId("aa830cfb478e546801761edb")
-          - _id: ObjectId("c3a8444bb0a13b8fe2f03286")
+          - _id: "aa830cfb478e546801761edb"
+          - _id: "c3a8444bb0a13b8fe2f03286"
         __v: 0 
 
   requestBodies:

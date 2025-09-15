@@ -1,0 +1,121 @@
+paths:
+  /api/pets/:
+    post:
+      summary: Crea una mascota con sus datos iniciales (Nombre, Especie y Fecha de Nacimiento)
+      tags:
+        - Pets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodiesPets/createPet'
+            example:
+              name: "Bailey"
+              specie: "gato"
+              birthDate: "2021-12-05"
+      responses:
+        "200":
+          description: Mascota creada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+                  payload:
+                    $ref: '#components/schemas/Pet'
+        "400":
+          description: Datos enviados incompletos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  error:
+                    type: string
+                    example: "Incomplete values"
+                required:
+                  - status
+                  - error
+              example:
+                status: "error"
+                error: "Incomplete values"    
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+components:
+  schemas:
+    Error500:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "error"
+        error:
+          type: string
+          example: "Internal server error"
+    Pet:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre de la mascota
+        specie:
+          type: string
+          description: Especie de la mascota (perro, gato, etc.)  
+        birthDate:
+          type: string
+          format: date
+          description: Fecha de nacimiento de la mascota (YYYY-MM-DD)
+        adopted:
+          type: boolean
+          description: Indica si la mascota fue adoptada
+          default: false
+        image:
+          type: string
+          description: URL de la imagen de la mascota
+        _id:
+          type: ObjectId
+          description: ID de la mascota en MongoDB
+        __v:
+          type: integer
+          description: Versión del documento en Mongo
+      example:
+        name: Bailey
+        birthDate: 2021-12-05T00:00:00.000Z
+        adopted: false
+        image: ""
+        _id: "fdfc161469ef62f4bdca75eb"
+        __v: 0 
+
+  requestBodiesPets:
+    createPet:
+      type: object
+      required:
+        - name
+        - specie
+        - birthDate
+      properties:
+        name:
+          type: string
+          description: Nombre de la mascota
+        specie:
+          type: string
+          description: Especie de la mascota (perro, gato, etc.)
+        birthDate:
+          type: string
+          format: date
+          description: Fecha de nacimiento de la mascota (YYYY-MM-DD)
+      example:
+        name: "Bailey"
+        specie: "gato"
+        birthDate: "2021-12-05"
